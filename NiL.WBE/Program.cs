@@ -23,7 +23,7 @@ namespace NiL.WBE
             {
                 try
                 {
-                    var server0 = new HttpServer(new Logic.DummyLogic(), 80);
+                    var server0 = new HttpServer(new Logic.DummyLogic(), 8080);
                     server0.Log += (s, e) => { Console.WriteLine(e.Text); };
                     server0.Run();
                 }
@@ -35,7 +35,7 @@ namespace NiL.WBE
 
             try
             {
-                var server = new HttpServer(new Logic.DummyLogic(), 8080);
+                var server = new HttpServer(new Logic.DummyLogic(), 80);
                 server.Log += (s, e) => { Console.WriteLine(e.Text); };
                 server.Run();
             }
