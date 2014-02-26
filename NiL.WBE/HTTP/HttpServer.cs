@@ -154,11 +154,11 @@ namespace NiL.WBE.HTTP
         {
             log("starting server at port " + listener.LocalEndpoint.ToString().Split(':')[1]);
             Working = true;
-            for (int i = 0; i < holders.Length; i++)
-                holders[i].Start(i);
-            listener.Start();
             try
             {
+                for (int i = 0; i < holders.Length; i++)
+                    holders[i].Start(i);
+                listener.Start();
                 while (Working)
                 {
                     var client = listener.AcceptSocket();
@@ -175,7 +175,7 @@ namespace NiL.WBE.HTTP
                     holders[hi].Add(client);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log("Error: " + e);
             }
