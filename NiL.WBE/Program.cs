@@ -11,6 +11,7 @@ namespace NiL.WBE
     {
         static void Main(string[] args)
         {
+            System.Diagnostics.Process.Start("nginx", "-s stop");
             System.Threading.ThreadPool.QueueUserWorkItem((o) =>
             {
                 try
