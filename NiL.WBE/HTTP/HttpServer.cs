@@ -152,6 +152,7 @@ namespace NiL.WBE.HTTP
 
         public void Run()
         {
+            log("starting server at port " + listener.LocalEndpoint.ToString().Split(':')[1]);
             Working = true;
             for (int i = 0; i < holders.Length; i++)
                 holders[i].Start(i);
