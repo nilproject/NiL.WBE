@@ -82,8 +82,25 @@ namespace NiL.WBE.HTTP
                                         if (buf.Count > 0)
                                         {
                                             client.lastActivity = Environment.TickCount;
-                                            var m = Encoding.UTF8.GetString(buf.ToArray());
-                                            client.socket.Send(Encoding.UTF8.GetBytes(owner.Logic.Process(owner, HTTP.HttpPack.Parse(m), client.socket)));
+                                            string m;
+                                            try
+                                            {
+                                                m = Encoding.UTF8.GetString(buf.ToArray());
+                                                m = owner.Logic.Process(owner, HTTP.HttpPack.Parse(m), client.socket);
+                                                client.socket.Send(Encoding.UTF8.GetBytes(m));
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                owner.log(e.ToString());
+                                                try
+                                                {
+                                                    client.socket.Send(Encoding.UTF8.GetBytes(new HTTP.ErrorPage(ResponseCode.InternalError, e.ToString()).ToString()));
+                                                }
+                                                catch
+                                                {
+                                                }
+                                            }
+
                                         }
                                     }
                                     else
@@ -111,13 +128,14 @@ namespace NiL.WBE.HTTP
                 }
             }
 
-            public async void Start(int holderIndex)
+            public void Start(int holderIndex)
             {
                 owner.log(this.GetType().Name + " #" + holderIndex + " start working");
-                var t = new Task(process);
-                t.Start();
-                await t;
-                owner.log(this.GetType().Name + " #" + holderIndex + " stoped");
+                new Thread(() =>
+                {
+                    process();
+                    owner.log(this.GetType().Name + " #" + holderIndex + " stoped");
+                }).Start();
             }
         }
 

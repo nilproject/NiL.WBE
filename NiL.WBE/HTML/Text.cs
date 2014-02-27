@@ -62,5 +62,10 @@ namespace NiL.WBE.HTML
         {
             return Value;
         }
+
+        public static implicit operator Text(string value)
+        {
+            return new Text(value);
+        }
     }
 }

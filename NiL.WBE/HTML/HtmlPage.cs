@@ -8,8 +8,6 @@ namespace NiL.WBE.HTML
 {
     public sealed class HtmlPage : HtmlElement
     {
-        public const string ContentType = "text/html";
-
         public override string Name
         {
             get

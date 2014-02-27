@@ -21,13 +21,14 @@ namespace NiL.WBE.Logic
             var t = pack.Cookies["visitcount"];
             if (t != null)
                 int.TryParse(t.Value, out visitCount);
+            visitCount++;
             var page = new HtmlPage()
             { 
                 new HtmlElement("div", "content")
                 {
                     new HtmlElement("div", "toptext")
                     {
-                        new Text("if you see that, than")
+                        new Text("if you see it, then")
                     },
                     new HtmlElement("div", "title")
                     {
@@ -70,8 +71,8 @@ namespace NiL.WBE.Logic
 ")
             });
             var res = new HTTP.HttpPack(page.ToString());
-            res.Fields.Add("Content-type", HTML.HtmlPage.ContentType);
-            res.Cookies.Add(new System.Net.Cookie("visitcount", (++visitCount).ToString()));
+            res.Fields.Add("Content-type", page.ContentType);
+            res.Cookies.Add(new System.Net.Cookie("visitcount", visitCount.ToString()));
             return res.ToString(HTTP.ResponseCode.OK);
         }
     }

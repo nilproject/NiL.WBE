@@ -9,6 +9,7 @@ namespace NiL.WBE.HTTP
     public enum ResponseCode
     {
         None = 0,
-        OK = 200
+        OK = 200,
+        InternalError = 500
     }
 }
