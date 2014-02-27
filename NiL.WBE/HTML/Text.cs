@@ -8,6 +8,14 @@ namespace NiL.WBE.HTML
 {
     public sealed class Text : HtmlElement
     {
+        public override string ContentType
+        {
+            get
+            {
+                return "text/plain";
+            }
+        }
+
         public override string Name
         {
             get
@@ -61,6 +69,11 @@ namespace NiL.WBE.HTML
         public override string ToString()
         {
             return Value;
+        }
+
+        public static implicit operator Text(string value)
+        {
+            return new Text(value);
         }
     }
 }

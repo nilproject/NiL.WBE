@@ -15,19 +15,43 @@ namespace NiL.WBE.Logic
 
         }
 
+        private string sendResource(string id)
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var stream = assembly.GetManifestResourceStream(id);
+            byte[] buf = new byte[stream.Length];
+            stream.Read(buf, 0, buf.Length);
+            stream.Close();
+            var res = new HTTP.HttpPack(Encoding.Default.GetString(buf));
+            res.ContentType = "application/octet-stream";
+            return res.ToString(HTTP.ResponseCode.OK);
+        }
+
         public override string Process(HTTP.HttpServer server, HTTP.HttpPack pack, Socket client)
         {
+            if (pack.Path == "/resource")
+                return sendResource(pack.Request);
+            if (pack.Path == "/error")
+            {
+                int errorCode = 400;
+                int.TryParse(pack.Request, out errorCode);
+                if (errorCode != 404)
+                    return new HTTP.ErrorPage((HTTP.ResponseCode)errorCode, ((HTTP.ResponseCode)errorCode).ToString().Replace('_', ' ')).ToString();
+            }
+            if (pack.Path != "/" && pack.Path != "")
+                return new HTTP.ErrorPage(HTTP.ResponseCode.NOT_FOUND, "Oops!").ToString();
             int visitCount = 0;
             var t = pack.Cookies["visitcount"];
             if (t != null)
                 int.TryParse(t.Value, out visitCount);
+            visitCount++;
             var page = new HtmlPage()
             { 
                 new HtmlElement("div", "content")
                 {
                     new HtmlElement("div", "toptext")
                     {
-                        new Text("if you see that, than")
+                        new Text("if you see it, then")
                     },
                     new HtmlElement("div", "title")
                     {
@@ -70,8 +94,8 @@ namespace NiL.WBE.Logic
 ")
             });
             var res = new HTTP.HttpPack(page.ToString());
-            res.Fields.Add("Content-type", HTML.HtmlPage.ContentType);
-            res.Cookies.Add(new System.Net.Cookie("visitcount", (++visitCount).ToString()));
+            res.ContentType = page.ContentType;
+            res.Cookies.Add(new System.Net.Cookie("visitcount", visitCount.ToString()));
             return res.ToString(HTTP.ResponseCode.OK);
         }
     }

@@ -129,7 +129,7 @@ namespace Http
             System.Net.Sockets.TcpClient client;
             client = new System.Net.Sockets.TcpClient();
             client.Connect(Uri.DnsSafeHost, port);
-            var buf = Encoding.UTF8.GetBytes(content);
+            var buf = Encoding.Default.GetBytes(content);
             client.GetStream().Write(buf, 0, buf.Length);
             var stream = client.GetStream();
             List<byte> response = new List<byte>();
@@ -152,7 +152,7 @@ namespace Http
                     response.Add((byte)b);
                     if (!endHeader)
                     {
-                        respHeader += Encoding.UTF8.GetString(response.ToArray());
+                        respHeader += Encoding.Default.GetString(response.ToArray());
                         response.Clear();
                     }
                 }
