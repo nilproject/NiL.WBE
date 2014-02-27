@@ -34,6 +34,21 @@ namespace NiL.WBE.HTML
             Name = name;
         }
 
+        public HtmlElement(string name, string id)
+            : this(true)
+        {
+            Name = name;
+            Properties.Add("id", id);
+        }
+
+        public HtmlElement(string name, string id, string className)
+            : this(true)
+        {
+            Name = name;
+            Properties.Add("id", id);
+            Properties.Add("class", className);
+        }
+
         public override string ToString()
         {
             StringBuilder res = new StringBuilder();
