@@ -57,7 +57,7 @@ namespace NiL.WBE.HTTP
 ")
             });
             var res = new HTTP.HttpPack(page.ToString());
-            res.Fields.Add("Content-type", page.ContentType);
+            res.ContentType = page.ContentType;
             return res.ToString(Code);
         }
     }

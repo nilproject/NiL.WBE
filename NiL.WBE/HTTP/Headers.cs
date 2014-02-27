@@ -23,6 +23,7 @@ namespace NiL.WBE.HTTP
                     case "method":
                     case "cookie":
                     case "content-length":
+                    case "content-type":
                     case "set-cookie":
                         throw new ArgumentException();
                 }

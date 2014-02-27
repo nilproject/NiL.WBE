@@ -8,6 +8,14 @@ namespace NiL.WBE.HTML
 {
     public sealed class Text : HtmlElement
     {
+        public override string ContentType
+        {
+            get
+            {
+                return "text/plain";
+            }
+        }
+
         public override string Name
         {
             get

@@ -44,6 +44,21 @@ namespace NiL.WBE.HTML
             }
         }
 
+        public override HtmlElement this[string name, int index]
+        {
+            get
+            {
+                if (index != 0)
+                    return null;
+                switch (name)
+                {
+                    case "body": return Body;
+                    case "head": return Head;
+                    default: return null;
+                }
+            }
+        }
+
         public HtmlElement Head { get; private set; }
         public HtmlElement Body { get; private set; }
 

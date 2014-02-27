@@ -85,16 +85,16 @@ namespace NiL.WBE.HTTP
                                             string m;
                                             try
                                             {
-                                                m = Encoding.UTF8.GetString(buf.ToArray());
+                                                m = Encoding.Default.GetString(buf.ToArray());
                                                 m = owner.Logic.Process(owner, HTTP.HttpPack.Parse(m), client.socket);
-                                                client.socket.Send(Encoding.UTF8.GetBytes(m));
+                                                client.socket.Send(Encoding.Default.GetBytes(m));
                                             }
                                             catch (Exception e)
                                             {
                                                 owner.log(e.ToString());
                                                 try
                                                 {
-                                                    client.socket.Send(Encoding.UTF8.GetBytes(new HTTP.ErrorPage(ResponseCode.InternalError, e.ToString()).ToString()));
+                                                    client.socket.Send(Encoding.Default.GetBytes(new HTTP.ErrorPage(ResponseCode.INTERNAL_SERVER_ERROR, e.ToString()).ToString()));
                                                 }
                                                 catch
                                                 {

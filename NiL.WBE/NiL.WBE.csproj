@@ -93,6 +93,7 @@
     <Compile Include="HTML\HtmlPage.cs" />
     <Compile Include="HTML\Br.cs" />
     <Compile Include="HTML\Text.cs" />
+    <Compile Include="HTML\Img.cs" />
     <Compile Include="Http.cs" />
     <Compile Include="HTTP\ErrorPage.cs" />
     <Compile Include="HTTP\HttpServer.cs" />

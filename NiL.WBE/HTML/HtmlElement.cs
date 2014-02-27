@@ -14,6 +14,29 @@ namespace NiL.WBE.HTML
         public virtual Dictionary<string, string> Properties { get; protected set; }
         public virtual List<HtmlElement> Subelements { get; protected set; }
 
+        public HtmlElement this[string name]
+        {
+            get
+            {
+                return this[name, 0];
+            }
+        }
+
+        public virtual HtmlElement this[string name, int index]
+        {
+            get
+            {
+                for (int i = 0; i < Subelements.Count; i++)
+                {
+                    if (Subelements[i].Name == name && index-- == 0)
+                    {
+                        return Subelements[i];
+                    }
+                }
+                return null;
+            }
+        }
+
         protected HtmlElement(bool initFields)
         {
             if (initFields)
