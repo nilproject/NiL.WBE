@@ -133,8 +133,12 @@ namespace NiL.WBE.HTTP
             }
             if (!ctdef)
                 headers.Add("Content-type: text/plain");
-            for (var i = 0; i < Cookies.Count; i++)
-                headers.Add("Set-Cookie: " + Cookies[i]);
+            if (code != ResponseCode.None)
+                for (var i = 0; i < Cookies.Count; i++)
+                    headers.Add("Set-Cookie: " + Cookies[i]);
+            else
+                for (var i = 0; i < Cookies.Count; i++)
+                    headers.Add("Cookie: " + Cookies[i]);
             headers.Sort();
             StringBuilder res = new StringBuilder();
             if (code == ResponseCode.None)
