@@ -15,7 +15,7 @@ namespace NiL.WBE.Logic
 
         }
 
-        private string sendImage(string id)
+        private string sendResource(string id)
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var stream = assembly.GetManifestResourceStream(id);
@@ -30,7 +30,7 @@ namespace NiL.WBE.Logic
         public override string Process(HTTP.HttpServer server, HTTP.HttpPack pack, Socket client)
         {
             if (pack.Path == "/resource")
-                return sendImage(pack.Request);
+                return sendResource(pack.Request);
             if (pack.Path == "/error")
             {
                 int errorCode = 400;

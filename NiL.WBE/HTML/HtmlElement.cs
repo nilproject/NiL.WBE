@@ -89,6 +89,24 @@ namespace NiL.WBE.HTML
             return res.ToString();
         }
 
+        public virtual HtmlElement GetElementById(string id)
+        {
+            if (Subelements != null)
+                for (int i = 0; i < Subelements.Count; i++)
+                {
+                    string cid = null;
+                    if (Subelements[i].Properties.TryGetValue("id", out cid) && cid == id)
+                        return Subelements[i];
+                    else
+                    {
+                        var temp = Subelements[i].GetElementById(id);
+                        if (temp != null)
+                            return temp;
+                    }
+                }
+            return null;
+        }
+
         public virtual IEnumerator<HtmlElement> GetEnumerator()
         {
             return Subelements.GetEnumerator();
