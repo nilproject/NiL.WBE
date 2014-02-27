@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace NiL.WBE.HTTP
 {
-    public sealed class HeaderFields : Dictionary<string, string>
+    public sealed class HeaderFields
     {
+        private Dictionary<string, string> headers;
+
         public new string this[string key]
         {
             get
             {
-                return base[key];
+                return headers[key];
             }
             set
             {
@@ -21,10 +23,26 @@ namespace NiL.WBE.HTTP
                     case "method":
                     case "cookie":
                     case "content-length":
+                    case "set-cookie":
                         throw new ArgumentException();
                 }
-                base[key] = value;
+                headers[key] = value;
             }
+        }
+
+        public HeaderFields()
+        {
+            headers = new Dictionary<string, string>();
+        }
+
+        public void Add(string name, string value)
+        {
+            this[name] = value;
+        }
+
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        {
+            return headers.GetEnumerator();
         }
     }
 }

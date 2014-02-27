@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NiL.WBE.HTTP;
+using System.Net.Sockets;
 
 namespace NiL.WBE.Logic
 {
@@ -14,6 +15,6 @@ namespace NiL.WBE.Logic
 
         }
 
-        public abstract string Process(HTTP.HttpServer server, HttpPack pack);
+        public abstract string Process(HTTP.HttpServer server, HttpPack pack, Socket client);
     }
 }

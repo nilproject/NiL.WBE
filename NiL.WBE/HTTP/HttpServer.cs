@@ -83,7 +83,7 @@ namespace NiL.WBE.HTTP
                                         {
                                             client.lastActivity = Environment.TickCount;
                                             var m = Encoding.UTF8.GetString(buf.ToArray());
-                                            client.socket.Send(Encoding.UTF8.GetBytes(owner.Logic.Process(owner, HTTP.HttpPack.Parse(m))));
+                                            client.socket.Send(Encoding.UTF8.GetBytes(owner.Logic.Process(owner, HTTP.HttpPack.Parse(m), client.socket)));
                                         }
                                     }
                                     else

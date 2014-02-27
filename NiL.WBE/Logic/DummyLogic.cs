@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NiL.WBE.HTML;
+using System.Net.Sockets;
 
 namespace NiL.WBE.Logic
 {
@@ -14,8 +15,12 @@ namespace NiL.WBE.Logic
 
         }
 
-        public override string Process(HTTP.HttpServer server, HTTP.HttpPack pack)
+        public override string Process(HTTP.HttpServer server, HTTP.HttpPack pack, Socket client)
         {
+            int visitCount = 0;
+            var t = pack.Cookies["visitcount"];
+            if (t != null)
+                int.TryParse(t.Value, out visitCount);
             var page = new HtmlPage()
             { 
                 new HtmlElement("div", "content")
@@ -31,7 +36,8 @@ namespace NiL.WBE.Logic
                     new HtmlElement("div", "bottomtext")
                     {
                         new Text("working")
-                    }
+                    },
+                    new Text("you was here " + visitCount + " times")
                 }
             };
             page.Head.Add(new HtmlElement("style")
@@ -65,6 +71,7 @@ namespace NiL.WBE.Logic
             });
             var res = new HTTP.HttpPack(page.ToString());
             res.Fields.Add("Content-type", HTML.HtmlPage.ContentType);
+            res.Cookies.Add(new System.Net.Cookie("visitcount", (++visitCount).ToString()));
             return res.ToString(HTTP.ResponseCode.OK);
         }
     }

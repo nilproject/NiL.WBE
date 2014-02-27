@@ -25,7 +25,7 @@ namespace NiL.WBE.HTTP
         public string Path { get; private set; }
         public string Host { get; private set; }
         public Method Method { get; private set; }
-        public List<Cookie> Cookies { get; private set; }
+        public CookieCollection Cookies { get; private set; }
         public HeaderFields Fields { get; private set; }
         public string Body { get; private set; }
 
@@ -37,7 +37,7 @@ namespace NiL.WBE.HTTP
         public HttpPack(string body)
         {
             Version = "HTTP/1.1";
-            Cookies = new List<Cookie>();
+            Cookies = new CookieCollection();
             Fields = new HeaderFields();
             Body = body;
         }
@@ -83,22 +83,23 @@ namespace NiL.WBE.HTTP
                 int i = startIndex;
                 while (!isCTL(text[i]) && !isSeparator(text[i]))
                     i++;
-                string name = text.Substring(startIndex, i - startIndex);
+                string name = text.Substring(startIndex, i - startIndex).ToLower();
                 if (name == "" || name == "\r")
                     break;
                 while (char.IsWhiteSpace(text[i])) i++;
                 if (text[i] != ':')
                     throw new ArgumentException();
                 do i++; while (char.IsWhiteSpace(text[i]));
-                if (name == "Cookie")
+                if (name == "cookie")
                 {
-                    throw new NotImplementedException();
+                    var c = text.Substring(i, endIndex - i).Trim().Split('=');
+                    pack.Cookies.Add(new Cookie(c[0], c.Length > 1 ? c[1] : ""));
                 }
                 else
                 {
                     switch (name)
                     {
-                        case "Host":
+                        case "host":
                             {
                                 pack.Host = text.Substring(i, endIndex - i).Trim();
                                 break;
@@ -132,6 +133,8 @@ namespace NiL.WBE.HTTP
             }
             if (!ctdef)
                 headers.Add("Content-type: text/plain");
+            for (var i = 0; i < Cookies.Count; i++)
+                headers.Add("Set-Cookie: " + Cookies[i]);
             headers.Sort();
             StringBuilder res = new StringBuilder();
             if (code == ResponseCode.None)
