@@ -11,7 +11,7 @@ namespace NiL.WBE
     {
         static void Main(string[] args)
         {
-            var server = new HttpServer(new Logic.DummyLogic(), 80);
+            var server = new HttpServer(new Logic.DummyLogic(), 8080);
             server.Log += (s, e) => { Console.WriteLine(e.Text); };
             server.Run();
         }
