@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NiL.WBE.HTTP;
 using System.Net.Sockets;
-using System.Web;
 
 namespace NiL.WBE.Logic
 {
@@ -15,6 +15,6 @@ namespace NiL.WBE.Logic
 
         }
 
-        public abstract void Process(HttpRequest request, HttpResponse response);
+        public abstract void Process(HTTP.HttpServer server, HttpPack pack, Socket client);
     }
 }

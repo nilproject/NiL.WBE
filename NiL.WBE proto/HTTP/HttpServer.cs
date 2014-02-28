@@ -86,8 +86,7 @@ namespace NiL.WBE.HTTP
                                             try
                                             {
                                                 m = Encoding.Default.GetString(buf.ToArray());
-                                                m = owner.Logic.Process(owner, HTTP.HttpPack.Parse(m), client.socket);
-                                                client.socket.Send(Encoding.Default.GetBytes(m));
+                                                owner.Logic.Process(owner, HTTP.HttpPack.Parse(m), client.socket);
                                             }
                                             catch (Exception e)
                                             {

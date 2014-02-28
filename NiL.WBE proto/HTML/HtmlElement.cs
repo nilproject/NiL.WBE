@@ -9,7 +9,7 @@ namespace NiL.WBE.HTML
 {
     public class HtmlElement : IEnumerable<HtmlElement>
     {
-        public virtual string ContentType { get { return "text/html"; } }
+        public virtual string ContentType { get { return "text/html; charset=utf-8"; } }
         public virtual string Name { get; protected set; }
         public virtual Dictionary<string, string> Properties { get; protected set; }
         public virtual List<HtmlElement> Subelements { get; protected set; }

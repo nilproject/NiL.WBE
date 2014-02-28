@@ -52,8 +52,7 @@ namespace NiL.WBE.HTML
             }
         }
 
-        public string Value { get; set; }
-        public bool Encode { get; set; }
+        public string Value { get; private set; }
 
         public Text()
             : base(false)
@@ -65,20 +64,10 @@ namespace NiL.WBE.HTML
             : base(false)
         {
             Value = value;
-            Encode = true;
-        }
-
-        public Text(string value, bool encode)
-            : base(false)
-        {
-            Value = value;
-            Encode = encode;
         }
 
         public override string ToString()
         {
-            if (!Encode)
-                return Value;
             return System.Web.HttpUtility.HtmlEncode(Value);
         }
 

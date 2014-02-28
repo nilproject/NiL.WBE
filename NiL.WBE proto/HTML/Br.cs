@@ -6,21 +6,13 @@ using System.Threading.Tasks;
 
 namespace NiL.WBE.HTML
 {
-    public sealed class Text : HtmlElement
+    public sealed class Br : HtmlElement
     {
-        public override string ContentType
-        {
-            get
-            {
-                return "text/plain; charset=utf-8";
-            }
-        }
-
         public override string Name
         {
             get
             {
-                return "Text";
+                return "Line break";
             }
             protected set
             {
@@ -52,39 +44,15 @@ namespace NiL.WBE.HTML
             }
         }
 
-        public string Value { get; set; }
-        public bool Encode { get; set; }
-
-        public Text()
+        public Br()
             : base(false)
         {
 
-        }
-
-        public Text(string value)
-            : base(false)
-        {
-            Value = value;
-            Encode = true;
-        }
-
-        public Text(string value, bool encode)
-            : base(false)
-        {
-            Value = value;
-            Encode = encode;
         }
 
         public override string ToString()
         {
-            if (!Encode)
-                return Value;
-            return System.Web.HttpUtility.HtmlEncode(Value);
-        }
-
-        public static implicit operator Text(string value)
-        {
-            return new Text(value);
+            return "\n<br/>\n";
         }
     }
 }
