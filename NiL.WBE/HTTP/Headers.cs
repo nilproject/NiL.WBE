@@ -10,11 +10,13 @@ namespace NiL.WBE.HTTP
     {
         private Dictionary<string, string> headers;
 
-        public new string this[string key]
+        public string this[string key]
         {
             get
             {
-                return headers[key];
+                var res = "";
+                headers.TryGetValue(key, out res);
+                return res; ;
             }
             set
             {

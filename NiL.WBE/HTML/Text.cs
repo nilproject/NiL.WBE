@@ -12,7 +12,7 @@ namespace NiL.WBE.HTML
         {
             get
             {
-                return "text/plain";
+                return "text/plain; charset=utf-8";
             }
         }
 
@@ -68,7 +68,7 @@ namespace NiL.WBE.HTML
 
         public override string ToString()
         {
-            return Value;
+            return System.Web.HttpUtility.HtmlEncode(Value);
         }
 
         public static implicit operator Text(string value)

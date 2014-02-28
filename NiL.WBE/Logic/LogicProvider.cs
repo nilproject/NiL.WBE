@@ -15,6 +15,6 @@ namespace NiL.WBE.Logic
 
         }
 
-        public abstract string Process(HTTP.HttpServer server, HttpPack pack, Socket client);
+        public abstract void Process(HTTP.HttpServer server, HttpPack pack, Socket client);
     }
 }

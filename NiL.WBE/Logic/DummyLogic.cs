@@ -15,31 +15,33 @@ namespace NiL.WBE.Logic
 
         }
 
-        private string sendResource(string id)
+        private void sendResource(HTTP.HttpPack pack, Socket client)
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var stream = assembly.GetManifestResourceStream(id);
+            var stream = assembly.GetManifestResourceStream(pack.Request);
             byte[] buf = new byte[stream.Length];
             stream.Read(buf, 0, buf.Length);
             stream.Close();
-            var res = new HTTP.HttpPack(Encoding.Default.GetString(buf));
+            var encoding = Encoding.GetEncoding(1251);
+            var res = new HTTP.HttpPack(encoding.GetString(buf));
             res.ContentType = "application/octet-stream";
-            return res.ToString(HTTP.ResponseCode.OK);
+            client.Send(encoding.GetBytes(res.ToString(HTTP.ResponseCode.OK)));
         }
 
-        public override string Process(HTTP.HttpServer server, HTTP.HttpPack pack, Socket client)
+        public override void Process(HTTP.HttpServer server, HTTP.HttpPack pack, Socket client)
         {
             if (pack.Path == "/resource")
-                return sendResource(pack.Request);
+                sendResource(pack, client);
+            var encoding = Encoding.UTF8;
             if (pack.Path == "/error")
             {
                 int errorCode = 400;
                 int.TryParse(pack.Request, out errorCode);
                 if (errorCode != 404)
-                    return new HTTP.ErrorPage((HTTP.ResponseCode)errorCode, ((HTTP.ResponseCode)errorCode).ToString().Replace('_', ' ')).ToString();
+                    client.Send(encoding.GetBytes(new HTTP.ErrorPage((HTTP.ResponseCode)errorCode, ((HTTP.ResponseCode)errorCode).ToString().Replace('_', ' ')).ToString()));
             }
             if (pack.Path != "/" && pack.Path != "")
-                return new HTTP.ErrorPage(HTTP.ResponseCode.NOT_FOUND, "Oops!").ToString();
+                client.Send(encoding.GetBytes(new HTTP.ErrorPage(HTTP.ResponseCode.NOT_FOUND, "Oops!").ToString()));
             int visitCount = 0;
             var t = pack.Cookies["visitcount"];
             if (t != null)
@@ -49,18 +51,9 @@ namespace NiL.WBE.Logic
             { 
                 new HtmlElement("div", "content")
                 {
-                    new HtmlElement("div", "toptext")
-                    {
-                        new Text("if you see it, then")
-                    },
-                    new HtmlElement("div", "title")
-                    {
-                        new Text("NiL.WBE")
-                    },                
-                    new HtmlElement("div", "bottomtext")
-                    {
-                        new Text("working")
-                    },
+                    new HtmlElement("div", "toptext") { new Text("if you see it, then") },
+                    new HtmlElement("div", "title") { new Text("NiL.WBE") },
+                    new HtmlElement("div", "bottomtext") { new Text("working") },
                     new Text("you was here " + visitCount + " times")
                 }
             };
@@ -93,10 +86,16 @@ namespace NiL.WBE.Logic
     }
 ")
             });
+            page.Head.Add(new HtmlElement("title") { new Text("NiL.WBE") });
             var res = new HTTP.HttpPack(page.ToString());
             res.ContentType = page.ContentType;
             res.Cookies.Add(new System.Net.Cookie("visitcount", visitCount.ToString()));
-            return res.ToString(HTTP.ResponseCode.OK);
+            client.Send(encoding.GetBytes(res.ToString(HTTP.ResponseCode.OK)));
+            var connection = pack.Fields["connection"];
+            if (string.Compare("keep-alive", connection, StringComparison.OrdinalIgnoreCase) == 0
+                || (string.IsNullOrWhiteSpace(connection) && pack.Version == "HTTP/1.1"))
+                return;
+            client.Close();
         }
     }
 }
