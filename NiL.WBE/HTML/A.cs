@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiL.WBE.HTML
+namespace NiL.WBE.Html
 {
     public class A : HtmlElement
     {
@@ -23,9 +23,9 @@ namespace NiL.WBE.HTML
         public A(string href)
             : base(false)
         {
-            Subelements = new List<HtmlElement>();
-            Properties = new Dictionary<string, string>();
-            Properties.Add("href", href);
+            Subnodes = new List<HtmlElement>();
+            Attributes = new Dictionary<string, string>();
+            Attributes.Add("href", href);
         }
     }
 }

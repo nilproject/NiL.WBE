@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiL.WBE.HTML
+namespace NiL.WBE.Html
 {
     public sealed class Br : HtmlElement
     {
@@ -20,7 +20,7 @@ namespace NiL.WBE.HTML
             }
         }
 
-        public override Dictionary<string, string> Properties
+        public override Dictionary<string, string> Attributes
         {
             get
             {
@@ -32,7 +32,7 @@ namespace NiL.WBE.HTML
             }
         }
 
-        public override List<HtmlElement> Subelements
+        public override List<HtmlElement> Subnodes
         {
             get
             {

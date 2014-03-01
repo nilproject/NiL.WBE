@@ -15,6 +15,6 @@ namespace NiL.WBE.Logic
 
         }
 
-        public abstract void Process(HttpRequest request, HttpResponse response);
+        public abstract void Process(HttpRequest request, HttpResponse response, HttpApplication application);
     }
 }

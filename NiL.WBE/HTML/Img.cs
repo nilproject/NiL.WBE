@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiL.WBE.HTML
+namespace NiL.WBE.Html
 {
     public sealed class Img : HtmlElement
     {

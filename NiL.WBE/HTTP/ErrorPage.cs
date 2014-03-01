@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NiL.WBE.HTML;
+using NiL.WBE.Html;
 
-namespace NiL.WBE.HTTP
+namespace NiL.WBE.Http
 {
     public sealed class ErrorPage
     {
@@ -56,9 +56,7 @@ namespace NiL.WBE.HTTP
     }
 ")
             });
-            var res = new HTTP.HttpPack(page.ToString());
-            res.ContentType = page.ContentType;
-            return res.ToString(Code);
+            return page.ToString();
         }
     }
 }

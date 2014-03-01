@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NiL.WBE.HTML;
+using NiL.WBE.Html;
 using System.Net.Sockets;
 using System.Web;
 
@@ -16,7 +16,7 @@ namespace NiL.WBE.Logic
 
         }
 
-        public override void Process(HttpRequest request, HttpResponse response)
+        public override void Process(HttpRequest request, HttpResponse response, HttpApplication application)
         {
             var encoding = Encoding.UTF8;
             int visitCount = 0;
@@ -63,13 +63,20 @@ namespace NiL.WBE.Logic
     }
 ", false)
             });
-            page.Head.Add(new HtmlElement("title") { new Text("NiL.WBE") });
-            response.ContentType = page.ContentType;
-            response.ContentEncoding = System.Text.Encoding.UTF8;
-            response.BinaryWrite(encoding.GetBytes(page.ToString()));
-            response.Cookies.Add(new HttpCookie("visitcount", visitCount.ToString()));
-            response.Status = "200 ALLRIGHT";
-            response.End();
+            try
+            {
+                page.Head.Add(new HtmlElement("title") { new Text("NiL.WBE") });
+                response.ContentType = page.ContentType;
+                response.ContentEncoding = System.Text.Encoding.UTF8;
+                response.Cookies.Add(new HttpCookie("visitcount", visitCount.ToString()));
+                response.Status = "200 OK";
+                response.BinaryWrite(encoding.GetBytes(page.ToString()));
+                application.CompleteRequest();
+            }
+            catch(Exception e)
+            {
+                string text = e.ToString();
+            }
         }
     }
 }

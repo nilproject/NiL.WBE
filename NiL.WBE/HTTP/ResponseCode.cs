@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiL.WBE.HTTP
+namespace NiL.WBE.Http
 {
-    public enum ResponseCode
+    public enum ResponseCode : int
     {
         None = 0,
         CONTINUE = 100,

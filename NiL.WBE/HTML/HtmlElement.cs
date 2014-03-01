@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NiL.WBE.HTML
+namespace NiL.WBE.Html
 {
     public class HtmlElement : IEnumerable<HtmlElement>
     {
         public virtual string ContentType { get { return "text/html"; } }
         public virtual string Name { get; protected set; }
-        public virtual Dictionary<string, string> Properties { get; protected set; }
-        public virtual List<HtmlElement> Subelements { get; protected set; }
+        public virtual Dictionary<string, string> Attributes { get; protected set; }
+        public virtual List<HtmlElement> Subnodes { get; protected set; }
 
         public HtmlElement this[string name]
         {
@@ -26,11 +26,11 @@ namespace NiL.WBE.HTML
         {
             get
             {
-                for (int i = 0; i < Subelements.Count; i++)
+                for (int i = 0; i < Subnodes.Count; i++)
                 {
-                    if (Subelements[i].Name == name && index-- == 0)
+                    if (Subnodes[i].Name == name && index-- == 0)
                     {
-                        return Subelements[i];
+                        return Subnodes[i];
                     }
                 }
                 return null;
@@ -42,8 +42,8 @@ namespace NiL.WBE.HTML
             if (initFields)
             {
                 Name = "";
-                Properties = new Dictionary<string, string>();
-                Subelements = new List<HtmlElement>();
+                Attributes = new Dictionary<string, string>();
+                Subnodes = new List<HtmlElement>();
             }
         }
 
@@ -62,44 +62,44 @@ namespace NiL.WBE.HTML
             : this(true)
         {
             Name = name;
-            Properties.Add("id", id);
+            Attributes.Add("id", id);
         }
 
         public HtmlElement(string name, string id, string className)
             : this(true)
         {
             Name = name;
-            Properties.Add("id", id);
-            Properties.Add("class", className);
+            Attributes.Add("id", id);
+            Attributes.Add("class", className);
         }
 
         public override string ToString()
         {
             StringBuilder res = new StringBuilder();
             res.Append("<").Append(Name);
-            foreach (var p in Properties)
+            foreach (var p in Attributes)
             {
                 var bound = p.Value.IndexOf('"') == -1 ? '"' : '\'';
                 res.Append(' ').Append(p.Key).Append("=").Append(bound).Append(p.Value).Append(bound);
             }
             res.Append('>');
-            for (int i = 0; i < Subelements.Count; i++)
-                res.Append(Subelements[i].ToString());
+            for (int i = 0; i < Subnodes.Count; i++)
+                res.Append(Subnodes[i].ToString());
             res.Append("</").Append(Name).Append('>');
             return res.ToString();
         }
 
         public virtual HtmlElement GetElementById(string id)
         {
-            if (Subelements != null)
-                for (int i = 0; i < Subelements.Count; i++)
+            if (Subnodes != null)
+                for (int i = 0; i < Subnodes.Count; i++)
                 {
                     string cid = null;
-                    if (Subelements[i].Properties.TryGetValue("id", out cid) && cid == id)
-                        return Subelements[i];
+                    if (Subnodes[i].Attributes.TryGetValue("id", out cid) && cid == id)
+                        return Subnodes[i];
                     else
                     {
-                        var temp = Subelements[i].GetElementById(id);
+                        var temp = Subnodes[i].GetElementById(id);
                         if (temp != null)
                             return temp;
                     }
@@ -109,14 +109,14 @@ namespace NiL.WBE.HTML
 
         public virtual IEnumerator<HtmlElement> GetEnumerator()
         {
-            return Subelements.GetEnumerator();
+            return Subnodes.GetEnumerator();
         }
 
         public virtual void Add(HtmlElement element)
         {
-            if (Subelements == null)
+            if (Subnodes == null)
                 throw new InvalidOperationException();
-            Subelements.Add(element);
+            Subnodes.Add(element);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

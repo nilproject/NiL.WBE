@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // общие сведения об этой сборке.
-[assembly: AssemblyTitle("WebApplication1")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("NiL.WBE")]
+[assembly: AssemblyDescription("NiL.WebBackend")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("WebApplication1")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
+[assembly: AssemblyCompany("NiLProject")]
+[assembly: AssemblyProduct("NiL.WebBackend")]
+[assembly: AssemblyCopyright("Copyright © NiLProject 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
