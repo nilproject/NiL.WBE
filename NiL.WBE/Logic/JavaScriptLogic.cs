@@ -78,9 +78,7 @@ namespace NiL.WBE.Logic
             var file = new FileStream(templateName, FileMode.Open, FileAccess.Read);
             templateText = new StreamReader(file).ReadToEnd();
             file.Close();
-            var template = new mshtml.HTMLDocument();
-            (template as mshtml.IHTMLDocument2).write(templateText);
-            string test = template.compatMode;
+            var template = NiL.WBE.Html.HtmlPage.Parse(templateText);
             return TypeProxy.Proxy(template);
         }
 

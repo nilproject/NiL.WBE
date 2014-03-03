@@ -47,7 +47,7 @@ namespace NiL.WBE.Html
             return ((TemplateElement)(element)).Name;
         }
 
-        public TemplateElement this[string name]
+        public new TemplateElement this[string name]
         {
             get { return (TemplateElement)BaseGet(name); }
         }

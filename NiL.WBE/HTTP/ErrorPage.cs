@@ -17,6 +17,12 @@ namespace NiL.WBE.Http
             Message = message;
         }
 
+        public ErrorPage(int code, string message)
+        {
+            Code = (ResponseCode)code;
+            Message = message;
+        }
+
         public override string ToString()
         {
             var page = new HtmlPage()

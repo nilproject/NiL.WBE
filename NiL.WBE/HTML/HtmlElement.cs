@@ -123,5 +123,47 @@ namespace NiL.WBE.Html
         {
             return ((IEnumerable<HtmlElement>)this).GetEnumerator();
         }
+
+        private static KeyValuePair<string, string> parseAttribute(string html, ref int pos)
+        {
+            string name = "";
+            string value = "";
+            int index = pos;
+            while (char.IsLetterOrDigit(html[pos])) pos++;
+            name = html.Substring(index, pos - index);
+            index = pos;
+            while (char.IsWhiteSpace(html[index])) index++;
+            if (html[pos] == '=')
+            {
+                pos = index++;
+                while (char.IsWhiteSpace(html[pos])) pos++;
+                char c = html[pos];
+                if (c != '"' && c != '\'')
+                    throw new ArgumentException();
+
+            }
+            return new KeyValuePair<string, string>(name, value);
+        }
+
+        public static HtmlElement Parse(string html, ref int pos)
+        {
+            HtmlElement res = new HtmlElement();
+            if (html[pos] != '<')
+                throw new ArgumentException("Invalid char at position " + pos);
+            pos++;
+            int start = pos;
+            while (char.IsLetterOrDigit(html[pos])) pos++;
+            res.Name = html.Substring(start, pos - start);
+            do
+            {
+                while (char.IsWhiteSpace(html[pos])) pos++;
+                if (html[pos] == '>')
+                    break;
+                var t = parseAttribute(html, ref pos);
+            }
+            while (true);
+            pos++;
+            return res;
+        }
     }
 }

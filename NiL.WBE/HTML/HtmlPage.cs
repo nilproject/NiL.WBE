@@ -89,22 +89,8 @@ namespace NiL.WBE.Html
   + Body + @"
 </html>";
         }
-        /*
-        private static HtmlElement parseElement(string html, ref int pos)
-        {
-            int start = pos;
-            while (char.IsLetterOrDigit(html[pos])) pos++;
-            string tagName = html.Substring(start, pos - start);
-            while (char.IsWhiteSpace(html[pos])) pos++;
-            while (html[pos] != '>')
-            {
-                start = pos;
-                while (char.IsLetterOrDigit(html[pos])) pos++;
-                while (char.IsWhiteSpace(html[pos])) pos++;
-            }
-        }
 
-        public static HtmlPage LoadFromString(string html)
+        public static HtmlPage Parse(string html)
         {
             HtmlPage res = new HtmlPage();
             int i = 0;
@@ -118,13 +104,12 @@ namespace NiL.WBE.Html
                 while (char.IsWhiteSpace(html[i++])) ;
             }
             i--;
-            var temp = parseElement(html, ref i);
+            var temp = HtmlElement.Parse(html, ref i);
             if (temp.Name != "html")
                 throw new ArgumentException("Invalid root tag.");
             res.Body = temp["body"];
             res.Head = temp["head"];
             return res;
         }
-         */
     }
 }

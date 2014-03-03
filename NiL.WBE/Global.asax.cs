@@ -27,21 +27,19 @@ namespace NiL.WBE
             }
             catch (Exception ex)
             {
+                Server.ClearError();
                 Response.Clear();
-#if DEBUG
                 var page = new Http.ErrorPage(Http.ResponseCode.INTERNAL_SERVER_ERROR, "Internal error. (" + ex.Message + ")");
-#else
-                var page = new Http.ErrorPage(Http.ResponseCode.INTERNAL_SERVER_ERROR, "Internal error.");
-#endif
                 Response.BinaryWrite(System.Text.Encoding.Default.GetBytes(page.ToString()));
                 Response.StatusCode = (int)Http.ResponseCode.INTERNAL_SERVER_ERROR;
+                Response.Flush();
                 CompleteRequest();
             }
         }
 
         void Application_EndRequest(object sender, EventArgs e)
         {
-
+            Server.ClearError();
         }
     }
 }
