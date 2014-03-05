@@ -82,10 +82,25 @@ namespace NiL.WBE.Logic
             return TypeProxy.Proxy(template);
         }
 
+        private static JSObject loadSnippet(Context context, JSObject args)
+        {
+            string templateName = args.GetField("0").ToString();
+            var sect = (WebConfigurationManager.GetSection("templates") as Html.TemplateElementCollection)[templateName];
+            templateName = sect.Path ?? templateName;
+            templateName = validatePath(templateName);
+            string templateText = "";
+            var file = new FileStream(templateName, FileMode.Open, FileAccess.Read);
+            templateText = new StreamReader(file).ReadToEnd();
+            file.Close();
+            var template = NiL.WBE.Html.HtmlElement.Parse(templateText);
+            return TypeProxy.Proxy(template);
+        }
+
         static JavaScriptLogic()
         {            
             defaultPath = WebConfigurationManager.AppSettings["jsLogicDefault"] ?? "scripts/default.js";
             NiL.JS.Core.Context.GlobalContext.InitField("loadTemplate").Assign(new NiL.JS.Core.ExternalFunction(loadTemplate));
+            NiL.JS.Core.Context.GlobalContext.InitField("loadSnippet").Assign(new NiL.JS.Core.ExternalFunction(loadSnippet));
             NiL.JS.Core.Context.GlobalContext.InitField("loadTemplateRaw").Assign(new NiL.JS.Core.ExternalFunction(loadTemplateRaw));
             NiL.JS.Core.Context.GlobalContext.InitField("System").Assign(new NiL.JS.NamespaceProvider("System"));
             NiL.JS.Core.Context.GlobalContext.InitField("NiL").Assign(new NiL.JS.NamespaceProvider("NiL"));

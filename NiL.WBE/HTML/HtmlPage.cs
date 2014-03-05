@@ -21,30 +21,6 @@ namespace NiL.WBE.Html
             }
         }
 
-        public override Dictionary<string, string> Attributes
-        {
-            get
-            {
-                return null;
-            }
-            protected set
-            {
-                throw new InvalidOperationException();
-            }
-        }
-
-        public override List<HtmlElement> Subnodes
-        {
-            get
-            {
-                return null;
-            }
-            protected set
-            {
-                throw new InvalidOperationException();
-            }
-        }
-
         public override HtmlElement this[string name, int index]
         {
             get
@@ -90,6 +66,14 @@ namespace NiL.WBE.Html
 </html>";
         }
 
+        public override object Clone()
+        {
+            var res = base.Clone() as HtmlPage;
+            res.Body = res["body"];
+            res.Head = res["head"];            
+            return res;
+        }
+
         public static HtmlPage Parse(string html)
         {
             HtmlPage res = new HtmlPage();
@@ -109,6 +93,12 @@ namespace NiL.WBE.Html
                 throw new ArgumentException("Invalid root tag.");
             res.Body = temp["body"];
             res.Head = temp["head"];
+            if (res.Body == null || res.Head == null)
+                throw new ArgumentException();
+            if (temp.Subnodes.Count != 2)
+                throw new ArgumentException();
+            res.Subnodes = temp.Subnodes;
+            res.Attributes = temp.Attributes;
             return res;
         }
     }

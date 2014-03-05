@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NiL.WBE.Html
 {
-    public class HtmlElement : IEnumerable<HtmlElement>
+    public class HtmlElement : IEnumerable<HtmlElement>, ICloneable
     {
         public virtual string ContentType { get { return "text/html"; } }
         public virtual string Name { get; protected set; }
@@ -28,7 +28,7 @@ namespace NiL.WBE.Html
             {
                 for (int i = 0; i < Subnodes.Count; i++)
                 {
-                    if (Subnodes[i].Name == name && index-- == 0)
+                    if (Subnodes[i].Name.Equals(name, StringComparison.OrdinalIgnoreCase) && index-- == 0)
                     {
                         return Subnodes[i];
                     }
@@ -42,7 +42,7 @@ namespace NiL.WBE.Html
             if (initFields)
             {
                 Name = "";
-                Attributes = new Dictionary<string, string>();
+                Attributes = new Dictionary<string, string>(StringComparer.Create(System.Globalization.CultureInfo.InvariantCulture, true));
                 Subnodes = new List<HtmlElement>();
             }
         }
@@ -89,21 +89,42 @@ namespace NiL.WBE.Html
             return res.ToString();
         }
 
-        public virtual HtmlElement GetElementById(string id)
+        public virtual HtmlElement GetSubElementBy(string attributeName, string value)
         {
             if (Subnodes != null)
+            {
                 for (int i = 0; i < Subnodes.Count; i++)
                 {
                     string cid = null;
-                    if (Subnodes[i].Attributes.TryGetValue("id", out cid) && cid == id)
+                    if (Subnodes[i].Attributes != null && Subnodes[i].Attributes.TryGetValue(attributeName, out cid) && cid == value)
                         return Subnodes[i];
                     else
                     {
-                        var temp = Subnodes[i].GetElementById(id);
+                        var temp = Subnodes[i].GetSubElementBy(attributeName, value);
                         if (temp != null)
                             return temp;
                     }
                 }
+            }
+            return null;
+        }
+        
+        public virtual HtmlElement[] GetSubElementsBy(string attributeName, string value)
+        {
+            if (Subnodes != null && Subnodes.Count != 0)
+            {
+                var res = new List<HtmlElement>();
+                for (int i = 0; i < Subnodes.Count; i++)
+                {
+                    string cid = null;
+                    if (Subnodes[i].Attributes != null && Subnodes[i].Attributes.TryGetValue(attributeName, out cid) && cid == value)
+                        res.Add(Subnodes[i]);
+                    var temp = Subnodes[i].GetSubElementsBy(attributeName, value);
+                    if (temp != null)
+                        res.AddRange(temp);
+                }
+                return res.Count == 0 ? null : res.ToArray();
+            }
             return null;
         }
 
@@ -124,46 +145,119 @@ namespace NiL.WBE.Html
             return ((IEnumerable<HtmlElement>)this).GetEnumerator();
         }
 
+        public virtual object Clone()
+        {
+            var res = this.MemberwiseClone() as HtmlElement;
+            if (res.Subnodes != null)
+                res.Subnodes = new List<HtmlElement>(res.Subnodes);
+            if (res.Attributes != null)
+                res.Attributes = new Dictionary<string, string>(res.Attributes);
+            return res;
+        }
+
         private static KeyValuePair<string, string> parseAttribute(string html, ref int pos)
         {
             string name = "";
             string value = "";
             int index = pos;
-            while (char.IsLetterOrDigit(html[pos])) pos++;
+            while (char.IsLetterOrDigit(html[pos])
+                || ((html[pos] == '-' || html[pos] == '.') && pos != index)
+                || html[pos] == '_'
+                || html[pos] == ':') pos++;
             name = html.Substring(index, pos - index);
             index = pos;
             while (char.IsWhiteSpace(html[index])) index++;
-            if (html[pos] == '=')
+            if (html[index] == '=')
             {
-                pos = index++;
-                while (char.IsWhiteSpace(html[pos])) pos++;
-                char c = html[pos];
+                do index++; while (char.IsWhiteSpace(html[index]));
+                while (char.IsWhiteSpace(html[index])) index++;
+                char c = html[index];
                 if (c != '"' && c != '\'')
                     throw new ArgumentException();
-
+                pos = ++index;
+                while (html[pos] != c) pos++;
+                value = html.Substring(index, pos - index);
+                pos++;
             }
             return new KeyValuePair<string, string>(name, value);
         }
 
-        public static HtmlElement Parse(string html, ref int pos)
+        public static HtmlElement Parse(string html)
         {
-            HtmlElement res = new HtmlElement();
-            if (html[pos] != '<')
-                throw new ArgumentException("Invalid char at position " + pos);
-            pos++;
-            int start = pos;
-            while (char.IsLetterOrDigit(html[pos])) pos++;
-            res.Name = html.Substring(start, pos - start);
-            do
+            int p = 0;
+            return Parse(html, ref p);
+        }
+
+        internal static HtmlElement Parse(string html, ref int pos)
+        {
+#if DEBUG
+            try
             {
-                while (char.IsWhiteSpace(html[pos])) pos++;
-                if (html[pos] == '>')
-                    break;
-                var t = parseAttribute(html, ref pos);
+#endif
+                HtmlElement res = new HtmlElement();
+                if (html[pos] != '<')
+                    throw new ArgumentException("Invalid char at position " + pos);
+                pos++;
+                int start = pos;
+                while (char.IsLetterOrDigit(html[pos])
+                        || ((html[pos] == '-' || html[pos] == '.') && pos != start)
+                        || html[pos] == '_'
+                        || html[pos] == ':') pos++;
+                res.Name = html.Substring(start, pos - start);
+                do
+                {
+                    while (char.IsWhiteSpace(html[pos])) pos++;
+                    if (html[pos] == '>')
+                        break;
+                    if (html[pos] == '/')
+                    {
+                        if (html[++pos] != '>')
+                            throw new ArgumentException();
+                        pos++;
+                        return res;
+                    }
+                    var t = parseAttribute(html, ref pos);
+                    if (t.Key == "")
+                        throw new ArgumentException("Invalid char \"" + html[pos] + "\" in element description");
+                    res.Attributes.Add(t.Key, t.Value);
+                }
+                while (true);
+                string finalSubS = "</" + res.Name;
+                do
+                {
+                    do pos++; while (char.IsWhiteSpace(html[pos]));
+                    if (html[pos] == '<')
+                    {
+                        if (html.IndexOf(finalSubS, pos, StringComparison.OrdinalIgnoreCase) == pos)
+                        {
+                            pos += finalSubS.Length;
+                            while (char.IsWhiteSpace(html[pos])) pos++;
+                            if (html[pos] != '>')
+                                throw new ArgumentException("Invalid close tag for \"" + res.Name + "\"");
+                            pos++;
+                            break;
+                        }
+                        else
+                            res.Subnodes.Add(HtmlElement.Parse(html, ref pos));
+                    }
+                    else
+                    {
+                        start = pos;
+                        while (html[pos] != '<') pos++;
+                        res.Subnodes.Add(new Text(html.Substring(start, pos - start).TrimEnd()));
+                        pos--;
+                    }
+
+                }
+                while (true);
+                return res;
+#if DEBUG
             }
-            while (true);
-            pos++;
-            return res;
+            catch(Exception)
+            {
+                throw;
+            }
+#endif
         }
     }
 }

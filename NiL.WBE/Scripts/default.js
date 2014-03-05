@@ -2,12 +2,9 @@
 
 try
 {
-    temp = loadTemplate("Default");
-    response.Write("<!DOCTYPE html>");
-    var test = NiL.WBE.Html.HtmlElement("a");
-    test.Attributes.set_Item("href", "http://vk.com/");
-    test.Subnodes.Add(NiL.WBE.Html.Text("vk"));
-    response.Write(test.ToString());
+    var temp = loadTemplate("Default");
+    temp.GetSubElementsBy("id", "test")[0].Subnodes.Add(NiL.WBE.Html.Text("Hello from script"));
+    response.Write(temp.toString());
 }
 catch(e)
 {
