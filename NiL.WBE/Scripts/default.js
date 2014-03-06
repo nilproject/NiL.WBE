@@ -3,6 +3,9 @@
 try
 {
     var temp = loadTemplate("Default");
+    temp.GetSubElementBy("id", "header-content")
+        .GetSubElementBy("id", "home")
+        .Attributes.Add("onclick", "document.location.href='/ipsum',false");
     if (request.Path == "/ipsum")
     {
         temp.GetSubElementBy("class", "post")
