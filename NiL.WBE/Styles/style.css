@@ -1,0 +1,72 @@
+﻿html {
+    height: 100%;
+}
+
+body {
+    background-color: rgb(230,230,230);
+    margin: 0px;
+    height: 100%;
+}
+
+header {
+    width: 100%;
+    background-color: white;
+    height: 50px;
+    box-shadow: 1px 0px 10px grey;
+    color: rgb(120,120,120);
+    position: fixed;
+    overflow: hidden;
+    text-align: right;
+    cursor: default;
+    min-width: 400px;
+}
+
+    header #header-content {
+        height: 100%;
+        float: right;
+        padding-right: 50px;
+    }
+
+    header .header-button {
+        display: inline-block;
+        padding: 13px 15px 0px 15px;
+        height: 37px;
+        transition: box-shadow linear 0.2s;
+    }
+
+        header .header-button:hover {
+            box-shadow: 0px 0px 10px gray;
+        }
+
+.content-holder {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 50px;
+}
+
+    .content-holder #content {
+        display: inline-block;
+        width: 70%;
+        background-color: white;
+        height: 100%;
+        max-width: 720px;
+        min-width: 400px;
+    }
+
+.shadow-holder {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: -1;
+    text-align: center;
+}
+
+    .shadow-holder .content-shadow {
+        display: inline-block;
+        width: 70%;
+        height: 100%;
+        box-shadow: 0px 0px 100px gray;
+        max-width: 720px;
+        min-width: 400px;
+    }
