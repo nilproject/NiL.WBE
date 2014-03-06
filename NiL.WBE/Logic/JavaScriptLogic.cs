@@ -55,6 +55,12 @@ namespace NiL.WBE.Logic
                 throw new FileNotFoundException("File \"" + path + "\" not found.");
         }
 
+        private static JSObject validateFileName(Context context, JSObject args)
+        {
+            string fileName = args.GetField("0").ToString();
+            return validatePath(fileName);
+        }
+
         private static JSObject loadTemplateRaw(Context context, JSObject args)
         {
             string templateName = args.GetField("0").ToString();
@@ -102,6 +108,7 @@ namespace NiL.WBE.Logic
             NiL.JS.Core.Context.GlobalContext.InitField("loadTemplate").Assign(new NiL.JS.Core.ExternalFunction(loadTemplate));
             NiL.JS.Core.Context.GlobalContext.InitField("loadSnippet").Assign(new NiL.JS.Core.ExternalFunction(loadSnippet));
             NiL.JS.Core.Context.GlobalContext.InitField("loadTemplateRaw").Assign(new NiL.JS.Core.ExternalFunction(loadTemplateRaw));
+            NiL.JS.Core.Context.GlobalContext.InitField("validateFileName").Assign(new NiL.JS.Core.ExternalFunction(validateFileName));
             NiL.JS.Core.Context.GlobalContext.InitField("System").Assign(new NiL.JS.NamespaceProvider("System"));
             NiL.JS.Core.Context.GlobalContext.InitField("NiL").Assign(new NiL.JS.NamespaceProvider("NiL"));
         }

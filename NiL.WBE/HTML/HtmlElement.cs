@@ -223,9 +223,10 @@ namespace NiL.WBE.Html
                 }
                 while (true);
                 string finalSubS = "</" + res.Name;
+                pos++;
                 do
                 {
-                    do pos++; while (char.IsWhiteSpace(html[pos]));
+                    while (char.IsWhiteSpace(html[pos])) pos++;
                     if (html[pos] == '<')
                     {
                         if (html.IndexOf(finalSubS, pos, StringComparison.OrdinalIgnoreCase) == pos)
@@ -238,14 +239,15 @@ namespace NiL.WBE.Html
                             break;
                         }
                         else
+                        {
                             res.Subnodes.Add(HtmlElement.Parse(html, ref pos));
+                        }
                     }
                     else
                     {
                         start = pos;
                         while (html[pos] != '<') pos++;
                         res.Subnodes.Add(new Text(html.Substring(start, pos - start).TrimEnd()));
-                        pos--;
                     }
 
                 }

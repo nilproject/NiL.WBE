@@ -66,6 +66,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\default.js" />
     <Content Include="Scripts\test.js" />
+    <Content Include="Styles\style.css" />
     <Content Include="Templates\AppsTemplate.html" />
     <Content Include="Templates\DefaultTemplate.html" />
     <Content Include="Web.config">
