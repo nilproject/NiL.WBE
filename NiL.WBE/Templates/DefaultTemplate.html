@@ -3,7 +3,29 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
-    <link href="/styles/style.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css' />
+    <link href="/styles/style.css" rel="stylesheet" type="text/css" />
+    <script>
+        function showAllPost(a) {
+            a.parentNode.parentNode.getElementsByClassName('post-content')[0].style['max-height'] = 'initial';
+            a.style.opacity = '0.0';
+            var phb = a.parentNode.parentNode.getElementsByClassName('post-hide-button')[0];
+            phb.style["margin-top"] = '-' + (phb.parentNode.clientHeight - 80) + 'px';
+            phb.style.height = (phb.parentNode.clientHeight - 100) + 'px';
+        }
+        function hideAllPost(a) {
+            a.parentNode.getElementsByClassName('post-content')[0].style['max-height'] = '100px';
+            a.style["margin-top"] = 'initial';
+            a.style.height = "0px";
+        }
+        function checkVisibility(a) {
+            if (a.clientHeight > a.parentNode.clientHeight) {
+                var uhb = a.parentNode.parentNode.getElementsByClassName('unhover-button')[0];
+                if (uhb && uhb.style.opacity != '1.0')
+                    uhb.style.opacity = '1.0';
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -18,7 +40,24 @@
     </div>
     <div class="content-holder">
         <div id="content">
-            lorem ipsum
+            <!-- Post snippet -->
+            <div class="post">
+                <div class="avatar-holder">
+
+                </div>
+                <div class="autor"></div>
+                <div class="post-content">
+                    <div class="text"
+                         onmouseover="checkVisibility(this)">
+                    </div>
+                </div>
+                <div class="post-footer">
+                    <div class="unhover-button" onclick="showAllPost(this)">Продолжение ...</div>
+                </div>
+                <div class="post-hide-button" onclick="hideAllPost(this)">
+                </div>
+            </div>
+            <!-- End post snippet -->
         </div>
     </div>
 </body>

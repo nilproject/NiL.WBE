@@ -1,5 +1,6 @@
 ﻿html {
     height: 100%;
+    font-family: "PT Sans";
 }
 
 body {
@@ -16,9 +17,9 @@ header {
     color: rgb(120,120,120);
     position: fixed;
     overflow: hidden;
-    text-align: right;
     cursor: default;
     min-width: 400px;
+    z-index: 100;
 }
 
     header #header-content {
@@ -49,10 +50,70 @@ header {
         display: inline-block;
         width: 70%;
         background-color: white;
-        height: 100%;
+        min-height: 100%;
         max-width: 720px;
         min-width: 400px;
+        padding-top: 30px;
     }
+
+        .content-holder #content .post {
+            margin-left: 2.5%;
+            width: 95%;
+            text-align: left;
+            border-bottom: solid 1px lightgray;
+        }
+
+            .content-holder #content .post .post-content {
+                max-height: 100px;
+                overflow: hidden;
+                padding: 0px 0px 0px 20px;
+            }
+
+            .content-holder #content .post .avatar-holder {
+                width: 50px;
+                float: left;
+            }
+
+            .content-holder #content .post .autor {
+                margin-left: 60px;
+                color: darkgray;
+            }
+
+            .content-holder #content .post .text {
+            }
+
+            .content-holder #content .post .post-footer {
+                height: 20px;
+                background-color: white;
+                cursor: default;
+                color: #afafaf;
+                text-transform: lowercase;
+                font-weight: 700;
+                font-size: 14px;
+            }
+
+            .content-holder #content .post .unhover-button {
+                display: inline-block;
+                opacity: 0.0;
+                transition: opacity linear 0.2s;
+                float: right;
+            }
+
+                .content-holder #content .post .unhover-button:hover {
+                    color: #3f3f3f;
+                }
+
+            .content-holder #content .post .post-hide-button {
+                display: inline-block;
+                float: left;
+                position: relative;
+                width: 50px;
+                transition: background-color linear 0.2s;
+            }
+
+                .content-holder #content .post .post-hide-button:hover {
+                    background-color: lightgray;
+                }
 
 .shadow-holder {
     width: 100%;

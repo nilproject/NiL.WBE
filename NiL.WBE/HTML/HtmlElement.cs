@@ -238,6 +238,14 @@ namespace NiL.WBE.Html
                             pos++;
                             break;
                         }
+                        else if (html[pos + 1] == '!')
+                        {
+                            pos += 3;
+                            pos = html.IndexOf("-->", pos);
+                            if (pos == -1)
+                                throw new ArgumentException();
+                            pos += 3;
+                        }
                         else
                         {
                             res.Subnodes.Add(HtmlElement.Parse(html, ref pos));
@@ -247,7 +255,10 @@ namespace NiL.WBE.Html
                     {
                         start = pos;
                         while (html[pos] != '<') pos++;
-                        res.Subnodes.Add(new Text(html.Substring(start, pos - start).TrimEnd()));
+                        res.Subnodes.Add(new Text(html.Substring(start, pos - start).TrimEnd())
+                        {
+                            Encode = res.Name != "script"
+                        });
                     }
 
                 }
