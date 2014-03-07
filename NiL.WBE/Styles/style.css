@@ -63,7 +63,7 @@ header {
             border-bottom: solid 1px lightgray;
         }
 
-            .content-holder #content .post .post-content {
+            .content-holder #content .post .text-hider {
                 max-height: 100px;
                 overflow: hidden;
                 padding: 0px 0px 0px 20px;
@@ -80,6 +80,19 @@ header {
             }
 
             .content-holder #content .post .text {
+            }
+
+            .content-holder #content .post .photos {
+                margin: 5px 0px 0px 70px;
+                text-align: right;
+            }
+
+                .content-holder #content .post .photos img {
+                    margin: 0px 5px 1px 0px;
+                }
+
+            .content-holder #content .post .date {
+                float: left;
             }
 
             .content-holder #content .post .post-footer {

@@ -17,6 +17,24 @@ try
         temp.GetSubElementBy("class", "post")
             .GetSubElementBy("class", "autor")
             .Subnodes.Add(NiL.WBE.Html.Text("Lorem Ipsum"));
+        temp.GetSubElementBy("class", "post")
+            .GetSubElementBy("class", "date")
+            .Subnodes.Add(NiL.WBE.Html.Text(Date().substring(0, Date().indexOf(" GMT"))));
+        temp.GetSubElementBy("class", "post")
+            .GetSubElementBy("class", "photos")
+            .Subnodes.Add(NiL.WBE.Html.Img("https://pp.vk.me/c413428/v413428111/a1f0/pBssLkiiO6c.jpg"));
+        temp.GetSubElementBy("class", "post")
+            .GetSubElementBy("class", "photos")
+            .Subnodes.Add(NiL.WBE.Html.Img("https://pp.vk.me/c413428/v413428818/71e2/gW3JphItD80.jpg"));
+        temp.GetSubElementBy("class", "post")
+            .GetSubElementBy("class", "photos")
+            .Subnodes.Add(NiL.WBE.Html.Img("https://pp.vk.me/c607127/v607127929/160b/knIPiQ-dGuI.jpg"));
+        temp.GetSubElementBy("class", "post")
+            .GetSubElementBy("class", "photos")
+            .Subnodes.Add(NiL.WBE.Html.Img("https://pp.vk.me/c607125/v607125333/1387/RJbio33uISs.jpg"));
+        temp.GetSubElementBy("class", "post")
+            .GetSubElementBy("class", "photos")
+            .Subnodes.Add(NiL.WBE.Html.Img("https://pp.vk.me/c313322/v313322492/9a7c/ZMJUdAibwYE.jpg"));
     }
     response.Write(temp.toString());
 }
